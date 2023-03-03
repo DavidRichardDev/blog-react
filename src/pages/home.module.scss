@@ -1,1 +1,77 @@
 // TODO
+.container {
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 2rem;
+    background-color: var(--gray-900);
+    height: 100vh;
+}
+
+.posts {
+    max-width: 720px;
+    margin: 5rem auto 0;
+    a {
+        display: block;
+        text-decoration: none;
+        & + a {
+            margin-top: 2rem;
+            padding-top: 2rem;
+            border-top: 1px solid #fff;
+        }
+
+        h4{
+            font-size: 2rem;
+            font-weight: bold;
+            text-decoration: none;
+            line-height: 3rem;
+            color: var(--white-200);
+        }
+
+        p {
+            font-weight: 400;
+            font-size: 18px;
+            line-height: 2rem;
+            color: var(--gray-700);
+        }
+
+        div {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            max-width: 20em;
+            color: var(--gray-700);
+            margin-top: 1.2rem;
+            time {
+                font-size: 14px;
+                font-weight: 400;
+                display: flex;
+                align-items: center;
+                &::before {
+                    content: '';
+                    background-image: url('/images/calendar.png');
+                    background-size: 100%;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    width: 20px;
+                    height: 20px;
+                    display: inline-block;
+                    margin-right: 5px;
+                }
+            }
+
+            span {
+                &::before {
+                    content: '';
+                    background-image: url('/images/user.png');
+                    background-size: 100%;
+                    background-repeat: no-repeat;
+                    background-position: center center;
+                    width: 20px;
+                    height: 20px;
+                    display: inline-block;
+                    margin-right: 5px;
+                }
+            }
+        }        
+    }
+}
