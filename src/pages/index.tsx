@@ -36,15 +36,18 @@ export default function Home({ posts }: any) {
       </Head>
       <main className={styles.container}>
         <div className={styles.posts}>
+          <img
+            className={styles.logoSpaceTraveling}
+            src="/images/spacetraveling.svg"
+            alt="Logo"
+          />
           {posts.map(post => (
-            <a href={post.uid} key={post.id}>
-              <h4>{post.data.title}</h4>
-              <p>{post.data.subtitle}</p>
+            <a href={post.slug} key={post.id}>
+              <h4>{post.title}</h4>
+              <p>{post.subtitle}</p>
               <div>
-                <time>
-                  {format(new Date(post.last_publication_date), 'dd/MM/yyyy')}
-                </time>
-                <span>{post.data.author}</span>
+                <time>{post.publicationDate}</time>
+                <span>{post.author}</span>
               </div>
             </a>
           ))}
@@ -61,8 +64,22 @@ export const getStaticProps = async ({ previewData }) => {
   const client = createClient({ previewData });
 
   // const postsResponse = await prismic.getByType('Post');
-  const posts = await client.getAllByType('post');
-  console.log('postss', posts[0].data.title);
+  const response = await client.getAllByType('post');
+
+  const posts = response.map(post => {
+    return {
+      id: post.id,
+      slug: post.uid,
+      title: post.data.title,
+      subtitle: post.data.subtitle,
+      author: post.data.author,
+      publicationDate: format(
+        new Date(post.last_publication_date),
+        'dd/MM/yyyy'
+      ),
+    };
+  });
+
   return {
     props: { posts },
   };
