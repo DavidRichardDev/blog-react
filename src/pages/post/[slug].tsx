@@ -1,9 +1,11 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import Header from '../../components/Header';
+import { createClient } from '../../services/prismic';
 
-import { getPrismicClient } from '../../services/prismic';
+// import { getPrismicClient } from '../../services/prismic';
 
-import commonStyles from '../../styles/common.module.scss';
-import styles from './post.module.scss';
+// import commonStyles from '../../styles/common.module.scss';
+// import styles from './post.module.scss';
 
 interface Post {
   first_publication_date: string | null;
@@ -26,20 +28,45 @@ interface PostProps {
   post: Post;
 }
 
-export default function Post() {
-  return <h1>Post page</h1>;
+export default function Post(props: PostProps) {
+  console.log('props', props);
+
+  const {
+    post: { data },
+  } = props;
+
+  return (
+    <div>
+      <Header />
+      <img src={data.banner.url} alt={data.title} />
+    </div>
+  );
 }
 
 // export const getStaticPaths = async () => {
 //   const prismic = getPrismicClient({});
 //   const posts = await prismic.getByType(TODO);
 
-//   // TODO
+//   TO DO
 // };
 
-// export const getStaticProps = async ({params }) => {
-//   const prismic = getPrismicClient({});
-//   const response = await prismic.getByUID(TODO);
+export const getStaticPaths: GetStaticPaths<{ slug: string }> = async () => {
+  return {
+    paths: [], // indicates that no page needs be created at build time
+    fallback: 'blocking', // indicates the type of fallback
+  };
+};
 
-//   // TODO
-// };
+export const getStaticProps: GetStaticProps<PostProps> = async ({
+  req,
+  params,
+}) => {
+  const prismic = createClient({ req });
+  const { slug } = params;
+
+  const post = await prismic.getByUID('post', slug);
+
+  return {
+    props: { post },
+  };
+};

@@ -3,6 +3,8 @@ import { AnyARecord } from 'dns';
 import Head from 'next/head';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
+import Link from 'next/link';
+import Header from '../components/Header';
 
 import { createClient } from '../services/prismic';
 
@@ -35,21 +37,19 @@ export default function Home({ posts }: any) {
         <title>Posts</title>
       </Head>
       <main className={styles.container}>
+        <Header />
         <div className={styles.posts}>
-          <img
-            className={styles.logoSpaceTraveling}
-            src="/images/spacetraveling.svg"
-            alt="Logo"
-          />
           {posts.map(post => (
-            <a href={post.slug} key={post.id}>
-              <h4>{post.title}</h4>
-              <p>{post.subtitle}</p>
-              <div>
-                <time>{post.publicationDate}</time>
-                <span>{post.author}</span>
-              </div>
-            </a>
+            <Link href={`/post/${post.slug}`}>
+              <a key={post.id}>
+                <h4>{post.title}</h4>
+                <p>{post.subtitle}</p>
+                <div>
+                  <time>{post.publicationDate}</time>
+                  <span>{post.author}</span>
+                </div>
+              </a>
+            </Link>
           ))}
 
           {/* <a href="" />
