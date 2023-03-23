@@ -8,7 +8,7 @@ export default function Header() {
           <img
             className={styles.logoSpaceTraveling}
             src="/images/spacetraveling.svg"
-            alt="Logo"
+            alt="logo"
           />
         </div>
       </div>

@@ -30,7 +30,9 @@ interface HomeProps {
   postsPagination: PostPagination;
 }
 
-export default function Home({ posts }: any) {
+export default function Home({
+  postsPagination: { results, next_page },
+}: HomeProps) {
   return (
     <>
       <Head>
@@ -39,21 +41,23 @@ export default function Home({ posts }: any) {
       <main className={styles.container}>
         <Header />
         <div className={styles.posts}>
-          {posts.map(post => (
-            <Link href={`/post/${post.slug}`}>
-              <a key={post.id}>
-                <h4>{post.title}</h4>
-                <p>{post.subtitle}</p>
-                <div>
-                  <time>{post.publicationDate}</time>
-                  <span>{post.author}</span>
-                </div>
-              </a>
-            </Link>
-          ))}
+          {results &&
+            results.map(post => (
+              <Link href={`/post/${post.uid}`}>
+                <a key={post.id}>
+                  <h4>{post.data.title}</h4>
+                  <p>{post.data.subtitle}</p>
+                  <div>
+                    <time>{post.first_publication_date}</time>
+                    <span>{post.data.author}</span>
+                  </div>
+                </a>
+              </Link>
+            ))}
 
-          {/* <a href="" />
-          <a href="" /> */}
+          {next_page && (
+            <button className={styles.seeMore}>Carregar mais posts</button>
+          )}
         </div>
       </main>
     </>
@@ -63,24 +67,30 @@ export default function Home({ posts }: any) {
 export const getStaticProps = async ({ previewData }) => {
   const client = createClient({ previewData });
 
-  // const postsResponse = await prismic.getByType('Post');
-  const response = await client.getAllByType('post');
+  const response = await client.getByType('post');
 
-  const posts = response.map(post => {
+  const posts: Post[] = response.results.map(post => {
     return {
       id: post.id,
-      slug: post.uid,
-      title: post.data.title,
-      subtitle: post.data.subtitle,
-      author: post.data.author,
-      publicationDate: format(
-        new Date(post.last_publication_date),
+      uid: post.uid,
+      first_publication_date: format(
+        new Date(post.first_publication_date),
         'dd/MM/yyyy'
       ),
+      data: {
+        title: post.data.title,
+        subtitle: post.data.subtitle,
+        author: post.data.author,
+      },
     };
   });
 
   return {
-    props: { posts },
+    props: {
+      postsPagination: {
+        next_page: response.next_page,
+        results: posts,
+      },
+    },
   };
 };
