@@ -1,1 +1,73 @@
-// TODO
+.postContent {
+	.banner {
+		width: 100%
+	}
+	.title {
+		display: flex;
+		justify-content: center;
+		h3{
+			text-align: left;
+			margin: 2em 0 0.8em 0;
+			max-width: 720px;
+			width: 100%;
+			color: var(--white-100);
+			font-size: 3em;
+			font-weight: 600;
+		}
+	}
+	div {
+		display: flex;
+		justify-content: center;
+		span {
+			max-width: 720px;
+			width: 100%;
+			display: flex;
+			justify-content: flex-start;
+			time {
+				font-size: 14px;
+				font-weight: 400;
+				display: flex;
+				align-items: center;
+				color: var(--gray-700);
+				margin-right: 2em;
+				&::before {
+					content: '';
+					background-image: url('/images/calendar.png');
+					background-size: 100%;
+					background-repeat: no-repeat;
+					background-position: center center;
+					width: 20px;
+					height: 20px;
+					display: inline-block;
+					margin-right: 5px;
+				}
+			}
+	
+			span {
+				color: var(--gray-700);
+				&::before {
+					content: '';
+					background-image: url('/images/user.png');
+					background-size: 100%;
+					background-repeat: no-repeat;
+					background-position: center center;
+					width: 20px;
+					height: 20px;
+					display: inline-block;
+					margin-right: 5px;
+				}
+			}
+		}
+	}
+	.content {
+		display: flex;
+		justify-content: center;
+		margin: 2em 0;
+		.textPost {
+			max-width: 720px;
+			flex-direction: column;
+			color: var(--gray-700);
+			font-weight: normal;
+		}
+	}
+}

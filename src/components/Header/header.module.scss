@@ -6,8 +6,10 @@
     .headerContent {
         max-width: 720px;
         width: 100%;
+        display: flex;
+        justify-content: flex-start;
         img {
-            margin: 2.3rem auto;
+            margin: 2.3rem 0;
         }
     }
 }

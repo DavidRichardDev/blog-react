@@ -1,11 +1,11 @@
 import { GetStaticPaths, GetStaticProps } from 'next';
+import { format } from 'date-fns';
 import Header from '../../components/Header';
 import { createClient } from '../../services/prismic';
-
 // import { getPrismicClient } from '../../services/prismic';
 
 // import commonStyles from '../../styles/common.module.scss';
-// import styles from './post.module.scss';
+import styles from './post.module.scss';
 
 interface Post {
   first_publication_date: string | null;
@@ -29,16 +29,32 @@ interface PostProps {
 }
 
 export default function Post(props: PostProps) {
-  console.log('props', props);
-
   const {
-    post: { data },
+    post: {
+      data: { title, subtitle, author, banner, content },
+      last_publication_date,
+    },
   } = props;
 
   return (
-    <div>
+    <div className={styles.postContent}>
       <Header />
-      <img src={data.banner.url} alt={data.title} />
+      <img className={styles.banner} src={banner.url} alt={title} />
+      <div className={styles.title}>
+        <h3>{title}</h3>
+      </div>
+      <div>
+        <span>
+          <time>{format(new Date(last_publication_date), 'dd/MM/yyyy')}</time>
+          <span>{author}</span>
+        </span>
+      </div>
+      <div className={styles.content}>
+        <div className={styles.textPost}>
+          <h4>{subtitle}</h4>
+          {content.map(body => body.body.map(item => <p>{item.text}</p>))}
+        </div>
+      </div>
     </div>
   );
 }
@@ -65,8 +81,19 @@ export const getStaticProps: GetStaticProps<PostProps> = async ({
   const { slug } = params;
 
   const post = await prismic.getByUID('post', slug);
+  // console.log('post', post);
+
+  // : {
+  //   data,
+  //   last_publication_date: format(
+  //     new Date(last_publication_date),
+  //     'dd/MM/yyyy'
+  //   ),
+  // },
 
   return {
-    props: { post },
+    props: {
+      post,
+    },
   };
 };

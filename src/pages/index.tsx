@@ -56,7 +56,9 @@ export default function Home({
             ))}
 
           {next_page && (
-            <button className={styles.seeMore}>Carregar mais posts</button>
+            <a href={next_page} className={styles.seeMore}>
+              Carregar mais posts
+            </a>
           )}
         </div>
       </main>
@@ -67,7 +69,7 @@ export default function Home({
 export const getStaticProps = async ({ previewData }) => {
   const client = createClient({ previewData });
 
-  const response = await client.getByType('post');
+  const response = await client.getByType('post', { pageSize: 1 });
 
   const posts: Post[] = response.results.map(post => {
     return {
@@ -84,6 +86,8 @@ export const getStaticProps = async ({ previewData }) => {
       },
     };
   });
+
+  console.log('response', response);
 
   return {
     props: {
